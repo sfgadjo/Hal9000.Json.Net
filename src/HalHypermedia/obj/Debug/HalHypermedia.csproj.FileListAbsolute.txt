@@ -1,0 +1,9 @@
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\obj\Debug\HalHypermedia.csprojResolveAssemblyReference.cache
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\bin\Debug\HalHypermedia.dll
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\bin\Debug\HalHypermedia.pdb
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\bin\Debug\Newtonsoft.Json.dll
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\bin\Debug\System.Net.Http.Formatting.dll
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\bin\Debug\Newtonsoft.Json.xml
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\bin\Debug\System.Net.Http.Formatting.xml
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\obj\Debug\HalHypermedia.dll
+G:\Visual Studio Projects\HALPrototype\HalHypermedia\obj\Debug\HalHypermedia.pdb

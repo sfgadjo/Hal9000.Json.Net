@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HALPrototype", "HALPrototype\HALPrototype.csproj", "{26C58870-CD7C-4787-93A8-89C59BE384D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalHypermedia", "HalHypermedia\HalHypermedia.csproj", "{47CF967D-ED96-47BC-9B75-245F0B03B8A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
