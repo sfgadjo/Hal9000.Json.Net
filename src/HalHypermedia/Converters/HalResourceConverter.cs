@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using HalHypermedia.Extensions;
+using Hal9000.Json.Net.Extensions;
 using Newtonsoft.Json;
 
-namespace HalHypermedia.Converters
+namespace Hal9000.Json.Net.Converters
 {
     internal sealed class HalResourceConverter : JsonConverter
     {

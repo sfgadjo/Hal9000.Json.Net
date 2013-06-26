@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace HalHypermedia.Extensions {
+namespace Hal9000.Json.Net.Extensions {
     internal static class ConversionExtensions {
         public static string ConvertToCamelCase(this string target) {
 

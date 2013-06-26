@@ -2,7 +2,7 @@
 using System.Globalization;
 using Newtonsoft.Json;
 
-namespace HalHypermedia.Converters {
+namespace Hal9000.Json.Net.Converters {
     internal sealed class HalEmbeddedResourceConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
 
@@ -10,7 +10,7 @@ namespace HalHypermedia.Converters {
             if (embeddedResource == null) {
                 const string format = "The target value is not of the expected type. Expected type: {0}";
                 throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, format,
-                                                                  typeof (HalRepresentation).Name));
+                                                                  typeof( HalEmbeddedResource ).Name ) );
             }
 
             serializer.Serialize( writer, embeddedResource.Resource );

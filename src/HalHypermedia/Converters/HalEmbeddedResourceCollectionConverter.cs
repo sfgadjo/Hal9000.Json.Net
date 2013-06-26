@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace HalHypermedia.Converters {
+namespace Hal9000.Json.Net.Converters {
     internal sealed class HalEmbeddedResourceCollectionConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
 

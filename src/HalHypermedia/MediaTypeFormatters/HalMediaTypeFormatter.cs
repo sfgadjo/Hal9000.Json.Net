@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using HalHypermedia.Converters;
+using Hal9000.Json.Net.Converters;
 
-namespace HalHypermedia.MediaTypeFormatters {
+namespace Hal9000.Json.Net.MediaTypeFormatters {
     public class HalMediaTypeFormatter : JsonMediaTypeFormatter {
         private readonly HalResourceConverter _resourceConverter = new HalResourceConverter();
         private readonly HalLinkCollectionConverter _linkCollectionConverter = new HalLinkCollectionConverter();

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HalHypermedia
+namespace Hal9000.Json.Net
 {
     public interface IHalResourceBuilder {
 

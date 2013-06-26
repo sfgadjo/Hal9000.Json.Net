@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HalHypermedia {
+namespace Hal9000.Json.Net {
     public class HalEmbeddedResourceBuilder : IHalEmbeddedResourceBuilder {
         private readonly IResource _resource;
         private readonly HalLinkCollection _linkCollection;

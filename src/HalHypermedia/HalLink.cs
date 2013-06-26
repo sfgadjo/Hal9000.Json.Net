@@ -1,4 +1,4 @@
-﻿namespace HalHypermedia {
+﻿namespace Hal9000.Json.Net {
     public class HalLink {
 
         public string Href { get; set; }

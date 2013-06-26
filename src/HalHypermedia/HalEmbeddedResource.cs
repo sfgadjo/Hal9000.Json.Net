@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HalHypermedia {
+namespace Hal9000.Json.Net {
     public sealed class HalEmbeddedResource {
         private readonly HalResource _resource;
 
