@@ -1,19 +1,19 @@
 ﻿using System;
 
 namespace HalHypermedia {
-    public class HalRepresentation {
-        private readonly IHalResource _resource;
+    internal class HalRepresentation {
+        private readonly IResource _resource;
         private readonly HalLinkCollection _linkCollection;
         private readonly HalEmbeddedResourceCollection _embeddedResourceCollection;
 
-        public HalRepresentation(IHalResource resource) {
+        public HalRepresentation(IResource resource) {
             if (resource == null) {
                 throw new ArgumentNullException("resource");
             }
             _resource = resource;
         }
 
-        public HalRepresentation(IHalResource resource, HalLinkCollection linkCollection)
+        public HalRepresentation(IResource resource, HalLinkCollection linkCollection)
             : this(resource) {
             if (linkCollection == null) {
                 throw new ArgumentNullException("linkCollection");
@@ -21,7 +21,7 @@ namespace HalHypermedia {
             _linkCollection = linkCollection;
         }
 
-        public HalRepresentation(IHalResource resource, HalLinkCollection linkCollection,
+        public HalRepresentation(IResource resource, HalLinkCollection linkCollection,
                                  HalEmbeddedResourceCollection embeddedResourceCollection)
             : this(resource, linkCollection) {
             if (embeddedResourceCollection == null) {
@@ -30,12 +30,12 @@ namespace HalHypermedia {
             _embeddedResourceCollection = embeddedResourceCollection;
         }
 
-        public static HalRepresentation CreateWithLinks(IHalResource resource, HalLinkCollection linkCollection) {
+        public static HalRepresentation CreateWithLinks(IResource resource, HalLinkCollection linkCollection) {
             var result = new HalRepresentation(resource, linkCollection);
             return result;
         }
 
-        public static HalRepresentation CreateWithLinksAndEmbedded(IHalResource resource,
+        public static HalRepresentation CreateWithLinksAndEmbedded(IResource resource,
                                                                    HalLinkCollection linkCollection,
                                                                    HalEmbeddedResourceCollection
                                                                        embeddedResourceCollection) {
@@ -43,7 +43,7 @@ namespace HalHypermedia {
             return result;
         }
 
-        public IHalResource Resource {
+        public IResource Resource {
             get { return _resource; }
         }
 

@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
-using System.Linq;
-using HalHypermedia.Extensions;
 using Newtonsoft.Json;
 
 namespace HalHypermedia.Converters {
-    public sealed class HalEmbeddedResourceCollectionConverter : JsonConverter {
+    internal sealed class HalEmbeddedResourceCollectionConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
 
             var embeddedResourceCollection = value as HalEmbeddedResourceCollection;
@@ -18,10 +17,30 @@ namespace HalHypermedia.Converters {
            
             writer.WriteStartObject();
             foreach (var embeddedPair in embeddedResourceCollection) {
+
                 writer.WritePropertyName( embeddedPair.Key.Value );
-                writer.WriteStartArray();
-                embeddedPair.Value.ToList().ForEach(s => serializer.Serialize(writer, s));
-                writer.WriteEndArray();
+
+                bool isEnumerable = embeddedPair.Value is IEnumerable;
+
+                if (isEnumerable)
+                {
+                    writer.WriteStartArray();
+                }
+                else
+                {
+                    writer.WriteStartObject();
+                }
+
+                serializer.Serialize(writer, embeddedPair.Value);
+
+                if (isEnumerable)
+                {
+                    writer.WriteEndArray();
+                }
+                else
+                {
+                    writer.WriteEndObject();
+                }
             }
             writer.WriteEndObject();
         }

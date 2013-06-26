@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace HalHypermedia {
-    public class HalLinkCollection : Dictionary<HalRelation,HalLink> {      
+    internal sealed class HalLinkCollection :  Dictionary<HalRelation,object> {      
 
     }
 }

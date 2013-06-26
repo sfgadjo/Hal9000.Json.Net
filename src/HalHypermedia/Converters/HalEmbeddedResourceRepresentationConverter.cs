@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using HalHypermedia.Extensions;
 using Newtonsoft.Json;
 
 namespace HalHypermedia.Converters {
-    public sealed class HalEmbeddedResourceRepresentationConverter : JsonConverter {
+    internal sealed class HalEmbeddedResourceRepresentationConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
 
             var representation = value as HalEmbeddedResourceRepresentation;

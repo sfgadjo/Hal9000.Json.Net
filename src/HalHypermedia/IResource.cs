@@ -1,4 +1,4 @@
 ﻿namespace HalHypermedia {
-    public interface IHalResource {
+    public interface IResource {
     }
 }

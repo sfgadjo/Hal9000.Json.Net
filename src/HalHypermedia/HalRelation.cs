@@ -1,7 +1,8 @@
 ﻿using System;
 
 namespace HalHypermedia {
-    public class HalRelation {
+    public class HalRelation : IEquatable<HalRelation>
+    {
 
         private const string SELF = "self";
 
@@ -27,6 +28,38 @@ namespace HalHypermedia {
 
         public string Value {
             get { return _value; }
+        }
+
+        public bool Equals(HalRelation other)
+        {
+            bool result = Equals((object)other);
+            return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as HalRelation;
+
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (String.CompareOrdinal(other.Value, _value) == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return _value.GetHashCode();
         }
     }
 }

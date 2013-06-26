@@ -5,7 +5,7 @@ using HalHypermedia.Extensions;
 using Newtonsoft.Json;
 
 namespace HalHypermedia.Converters {
-    public class HalRepresentationConverter : JsonConverter {
+    internal class HalRepresentationConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
 
             var representation = value as HalRepresentation;

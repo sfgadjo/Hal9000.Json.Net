@@ -1,11 +1,11 @@
 ﻿using System;
 
 namespace HalHypermedia {
-    public sealed class HalEmbeddedResourceRepresentation {
-        private readonly IHalResource _resource;
+    internal sealed class HalEmbeddedResourceRepresentation {
+        private readonly IResource _resource;
         private readonly HalLinkCollection _linkCollection;
 
-        public HalEmbeddedResourceRepresentation(IHalResource resource, HalLinkCollection linkCollection) {
+        public HalEmbeddedResourceRepresentation(IResource resource, HalLinkCollection linkCollection) {
             if (resource == null) {
                 throw new ArgumentNullException( "resource" );
             }
@@ -16,7 +16,7 @@ namespace HalHypermedia {
             _linkCollection = linkCollection;
         }
 
-        public IHalResource Resource {
+        public IResource Resource {
             get {
                 return _resource;
             }
