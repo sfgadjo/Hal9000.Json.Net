@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
-using HalHypermedia;
+using Hal9000.Json.Net;
 
 namespace HALPrototype.Controllers {
     public class ValuesController : ApiController {
@@ -11,23 +11,19 @@ namespace HALPrototype.Controllers {
            
             var msg = new HttpResponseMessage();
             var bldr = new HalResourceBuilder(new Customer { Name = "Joe Blow",Title = "President"});
-            bldr.IncludeRelationWithSingleLink(HalRelation.CreateSelfRelation(), new HalLink {Href = "/something/123"});
+            bldr.IncludeRelationWithSingleLink(HalRelation.CreateSelfRelation(), new HalLink ("/something/123"));
             bldr.IncludeRelationWithMultipleLinks( new HalRelation( "customer" ),
                                                   new HalLink[]
                                                       {
-                                                          new HalLink {Href = "/customer/1"},
-                                                          new HalLink {Href = "/customer/2"}
+                                                          new HalLink ("/customer/1"),
+                                                          new HalLink ("/customer/2")
                                                       });
 
             var embeddedBldr = new HalEmbeddedResourceBuilder(new Customer
                 {
                     Name = "Sharon Jones",
                     Title = "CEO"
-                }).IncludeRelationWithSingleLink(new HalRelation("product"), new HalLink
-                        {
-                            Href = "/new/112",
-                            Profile = "https://profiles.com"
-                        });
+                }).IncludeRelationWithSingleLink(new HalRelation("product"), new HalLink("/new/112") { Profile = "https://profiles.com" });
             var embeddedResource = new HalEmbeddedResource(embeddedBldr);
             bldr.IncludeEmbeddedWithSingleResource( new HalRelation( "order" ), embeddedResource );
 

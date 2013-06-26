@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using HalHypermedia.MediaTypeFormatters;
+﻿using System.Web.Http;
+using Hal9000.Json.Net.MediaTypeFormatters;
 using Newtonsoft.Json.Serialization;
 
 namespace HALPrototype {

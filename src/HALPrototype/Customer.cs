@@ -1,4 +1,4 @@
-﻿using HalHypermedia;
+﻿using Hal9000.Json.Net;
 
 namespace HALPrototype {
     public class Customer : IResource {
