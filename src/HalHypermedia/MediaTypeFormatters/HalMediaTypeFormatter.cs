@@ -8,12 +8,14 @@ namespace HalHypermedia.MediaTypeFormatters {
         private readonly HalResourceConverter _resourceConverter = new HalResourceConverter();
         private readonly HalLinkCollectionConverter _linkCollectionConverter = new HalLinkCollectionConverter();
         private readonly HalEmbeddedResourceCollectionConverter _embeddedResourceCollectionConverter = new HalEmbeddedResourceCollectionConverter();
+        private readonly HalEmbeddedResourceConverter _embeddedResourceConverter = new HalEmbeddedResourceConverter();
 
         public HalMediaTypeFormatter() {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/hal+json"));
             SerializerSettings.Converters.Add(_resourceConverter);
             SerializerSettings.Converters.Add( _linkCollectionConverter );
             SerializerSettings.Converters.Add(_embeddedResourceCollectionConverter);
+            SerializerSettings.Converters.Add(_embeddedResourceConverter);
         }
 
         public override bool CanReadType(Type type) {

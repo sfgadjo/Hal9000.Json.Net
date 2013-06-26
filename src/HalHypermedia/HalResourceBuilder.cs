@@ -48,7 +48,7 @@ namespace HalHypermedia
             return this;
         }
 
-        public IHalResourceBuilder IncludeEmbeddedWithSingleResource(HalRelation relation, IResource resource)
+        public IHalResourceBuilder IncludeEmbeddedWithSingleResource(HalRelation relation, HalEmbeddedResource resource)
         {
             if (relation == null)
             {
@@ -62,7 +62,7 @@ namespace HalHypermedia
             return this;
         }
 
-        public IHalResourceBuilder IncludeEmbeddedWithMultipleResources(HalRelation relation, IEnumerable<IResource> resources)
+        public IHalResourceBuilder IncludeEmbeddedWithMultipleResources(HalRelation relation, IEnumerable<HalEmbeddedResource> resources)
         {
             if (relation == null)
             {

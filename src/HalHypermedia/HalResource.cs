@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HalHypermedia
+﻿namespace HalHypermedia
 {
     public sealed class HalResource
     {
@@ -17,10 +15,6 @@ namespace HalHypermedia
         internal HalResource(IResource resource, HalLinkCollection linkCollection,
                                        HalEmbeddedResourceCollection embeddedResourceCollection) : this(resource, linkCollection)
         {
-            if (embeddedResourceCollection == null)
-            {
-                throw new ArgumentNullException("embeddedResourceCollection");
-            }
             _embeddedResourceCollection = embeddedResourceCollection;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace HalHypermedia.Converters {
@@ -20,27 +21,21 @@ namespace HalHypermedia.Converters {
 
                 writer.WritePropertyName( embeddedPair.Key.Value );
 
-                bool isEnumerable = embeddedPair.Value is IEnumerable;
+                //bool isEnumerable = embeddedPair.Value is IEnumerable<IResource>;
 
-                if (isEnumerable)
-                {
-                    writer.WriteStartArray();
-                }
-                else
-                {
-                    writer.WriteStartObject();
-                }
-
-                serializer.Serialize(writer, embeddedPair.Value);
-
-                if (isEnumerable)
-                {
-                    writer.WriteEndArray();
-                }
-                else
-                {
-                    writer.WriteEndObject();
-                }
+                //if (isEnumerable)
+                //{
+                //    writer.WriteStartArray();
+                //    var resources = (IEnumerable<IResource>) embeddedPair.Value;
+                //    resources.ToList().ForEach( resource => serializer.Serialize( writer, resource) );
+                //    writer.WriteEndArray();
+                //}
+                //else
+                //{
+                //    writer.WriteStartObject();
+                    serializer.Serialize( writer, embeddedPair.Value );
+                //    writer.WriteEndObject();
+                //}
             }
             writer.WriteEndObject();
         }

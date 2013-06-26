@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using HalHypermedia.Extensions;
@@ -17,46 +17,29 @@ namespace HalHypermedia.Converters {
             }
 
             writer.WriteStartObject();
-            foreach (var linkPair in linkCollection)
-            {
+            foreach (var linkPair in linkCollection) {
 
                 writer.WritePropertyName(linkPair.Key.Value);
-                Type type = linkPair.Value.GetType();
-
-                writer.WriteStartObject();
-                type.GetProperties().ToList().ForEach(s =>
-                    {
-                        var propertyValue = s.GetValue(linkPair.Value, null);
-                        if (propertyValue != null)
-                        {
-                            string propertyName = s.GetJsonPropertyName();
-                            writer.WritePropertyName(propertyName);
-
-                            bool isEnumerable = linkPair.Value is IEnumerable;
-
-                            if (isEnumerable)
-                            {
-                                writer.WriteStartArray();
-                            }
-                            else
-                            {
-                                writer.WriteStartObject();
-                            }
-                            
-                            serializer.Serialize(writer, propertyValue);
-
-                            if (isEnumerable)
-                            {
-                                writer.WriteEndArray();
-                            }
-                            else
-                            {
-                                writer.WriteEndObject();
-                            }
-                        }
-                    });
-                
-                writer.WriteEndObject();
+                serializer.Serialize(writer, linkPair.Value);
+                //bool isEnumerable = linkPair.Value is IEnumerable<HalLink>;
+                //if (isEnumerable) {
+                //    //writer.WriteStartArray();
+                //    var links = (IEnumerable<HalLink>) linkPair.Value;
+                //    serializer.Serialize(writer, links);
+                //    //writer.WriteEndArray();
+                //} else {
+                //    serializer.Serialize( writer, linkPair.Value );
+                //    //Type type = typeof (HalLink);
+                //    //type.GetProperties().ToList().ForEach(propInfo => {
+                           
+                //    //        //var propertyValue = propInfo.GetValue(linkPair.Value, null);
+                //    //        //if (propertyValue != null) {
+                //    //        //    string propertyName = propInfo.GetJsonPropertyName();
+                //    //        //    writer.WritePropertyName(propertyName);
+                                
+                //    //        //}
+                //    //    });
+                //}
             }
             writer.WriteEndObject();
         }

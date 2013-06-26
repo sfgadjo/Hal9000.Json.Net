@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace HalHypermedia
 {
-    public interface IHalResourceBuilder
-    {
+    public interface IHalResourceBuilder {
+
         IHalResourceBuilder IncludeRelationWithSingleLink(HalRelation relation, HalLink link);
         IHalResourceBuilder IncludeRelationWithMultipleLinks(HalRelation relation, IEnumerable<HalLink> links);
-        IHalResourceBuilder IncludeEmbeddedWithSingleResource(HalRelation relation, IResource resource);
+
+        IHalResourceBuilder IncludeEmbeddedWithSingleResource(HalRelation relation,
+                                                              HalEmbeddedResource embeddedResource);
 
         IHalResourceBuilder IncludeEmbeddedWithMultipleResources(HalRelation relation,
-                                                                   IEnumerable<IResource> resource);
+                                                                 IEnumerable<HalEmbeddedResource> embeddedResources);
 
         HalResource Build();
     }

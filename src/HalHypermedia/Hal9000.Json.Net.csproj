@@ -40,12 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\HalEmbeddedResourceCollectionConverter.cs" />
-    <Compile Include="Converters\HalEmbeddedResourceRepresentationConverter.cs" />
+    <Compile Include="Converters\HalEmbeddedResourceConverter.cs" />
     <Compile Include="Converters\HalLinkCollectionConverter.cs" />
     <Compile Include="Converters\HalRepresentationConverter.cs" />
     <Compile Include="Converters\HalResourceConverter.cs" />
     <Compile Include="Extensions\ConversionExtensions.cs" />
-    <Compile Include="HalEmbeddedResourceRepresentation.cs" />
+    <Compile Include="HalEmbeddedResource.cs" />
+    <Compile Include="HalEmbeddedResourceBuilder.cs" />
     <Compile Include="HalResourceBuilder.cs" />
     <Compile Include="HalResource.cs" />
     <Compile Include="HalPropertyNames.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="HalLinkCollection.cs" />
     <Compile Include="HalRelation.cs" />
     <Compile Include="HalRepresentation.cs" />
+    <Compile Include="IHalEmbeddedResourceBuilder.cs" />
     <Compile Include="IHalResourceBuilder.cs" />
     <Compile Include="IResource.cs" />
     <Compile Include="MediaTypeFormatters\HalMediaTypeFormatter.cs" />

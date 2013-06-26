@@ -1,17 +1,13 @@
 ﻿using System;
 
 namespace HalHypermedia {
-    public class HalRelation : IEquatable<HalRelation>
+    public sealed class HalRelation : IEquatable<HalRelation>
     {
 
         private const string SELF = "self";
 
         private readonly string _value;
-        private HalRelation(string relation) {
-            _value = relation;
-        }
-
-        public static HalRelation CreateOrThrow(string relation) {
+        public HalRelation(string relation) {
             if ( String.IsNullOrWhiteSpace( relation ) ) {
                 throw new ArgumentException( "relation cannot be null or empty.", "relation" );
             }
@@ -19,7 +15,7 @@ namespace HalHypermedia {
             if ( relation.Contains( " " ) ) {
                 throw new InvalidOperationException( "relation cannot contain any of the" );
             }
-            return new HalRelation(relation);
+            _value = relation;
         }
 
         public static HalRelation CreateSelfRelation() {

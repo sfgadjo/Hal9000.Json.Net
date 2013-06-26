@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using HalHypermedia;
-using HalHypermedia.MediaTypeFormatters;
 
 namespace HALPrototype.Controllers {
     public class ValuesController : ApiController {
@@ -12,45 +12,37 @@ namespace HALPrototype.Controllers {
             var msg = new HttpResponseMessage();
             var bldr = new HalResourceBuilder(new Customer { Name = "Joe Blow",Title = "President"});
             bldr.IncludeRelationWithSingleLink(HalRelation.CreateSelfRelation(), new HalLink {Href = "/something/123"});
-            bldr.IncludeRelationWithMultipleLinks(HalRelation.CreateOrThrow("customer"),
+            bldr.IncludeRelationWithMultipleLinks( new HalRelation( "customer" ),
                                                   new HalLink[]
                                                       {
                                                           new HalLink {Href = "/customer/1"},
                                                           new HalLink {Href = "/customer/2"}
                                                       });
-            bldr.IncludeEmbeddedWithSingleResource(HalRelation.CreateOrThrow("order"),
-                                                   new Customer {Name = "Sharon", Title = "CEO"});
-            bldr.IncludeEmbeddedWithMultipleResources(HalRelation.CreateOrThrow("product"),
-                                                      new Customer[]
-                                                          {new Customer {Name = "Xavier"}, new Customer {Name = "Jose"}});
+
+            var embeddedBldr = new HalEmbeddedResourceBuilder(new Customer
+                {
+                    Name = "Sharon Jones",
+                    Title = "CEO"
+                }).IncludeRelationWithSingleLink(new HalRelation("product"), new HalLink
+                        {
+                            Href = "/new/112",
+                            Profile = "https://profiles.com"
+                        });
+            var embeddedResource = new HalEmbeddedResource(embeddedBldr);
+            bldr.IncludeEmbeddedWithSingleResource( new HalRelation( "order" ), embeddedResource );
+
+            var embeds = new List<HalEmbeddedResource>
+                {
+                    new HalEmbeddedResource(embeddedBldr),
+                    new HalEmbeddedResource(embeddedBldr)
+                };
+
+            bldr.IncludeEmbeddedWithMultipleResources( new HalRelation( "product" ),
+                                                      embeds);
             var resource = bldr.Build();
-            //var rep = new HalRepresentation(new Customer
-            //    {
-            //        Name = "Joe",
-            //        Title = "President"
-            //    },
-            //                                new HalLinkCollection
-            //                                    {
-            //                                        {
-            //                                            HalRelation.CreateSelfRelation(),
-            //                                            new HalLink {Href = "/api/values", Title = "My bad self."}
-            //                                        }
-            //                                    }, new HalEmbeddedResourceCollection
-            //                                        {
-            //                                            {
-            //                                                HalRelation.CreateOrThrow("customer"),
-            //                                                new List<HalEmbeddedResourceRepresentation>{new HalEmbeddedResourceRepresentation(
-            //                                           new Customer {Name = "Susan"},
-            //                                           new HalLinkCollection
-            //                                               {
-            //                                                   {
-            //                                                       HalRelation.CreateSelfRelation(),
-            //                                                       new HalLink {Href = "/customer/123"}
-            //                                                   }
-            //                                               })
-            //                                            }}
-            //                                        });
-            msg.Content = new ObjectContent( typeof( HalResource ), resource, new HalMediaTypeFormatter(), "application/hal+json" );
+            
+            //use the formatter added in the WebApiConfig
+            msg.Content = new ObjectContent( typeof( HalResource ), resource, new MediaTypeFormatterCollection().JsonFormatter, "application/hal+json" );
 
             return msg;
         }

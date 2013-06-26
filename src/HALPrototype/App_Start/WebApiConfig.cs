@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using HalHypermedia.MediaTypeFormatters;
+using Newtonsoft.Json.Serialization;
 
 namespace HALPrototype {
     public static class WebApiConfig {
@@ -13,6 +15,10 @@ namespace HALPrototype {
                     id = RouteParameter.Optional
                 }
             );
+            var formatter = new HalMediaTypeFormatter();
+            formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            formatter.Indent = true;
+            config.Formatters.Add(formatter);
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
             // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.
