@@ -11,6 +11,8 @@
     <AssemblyName>Hal9000.Json.Net</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -40,24 +43,25 @@
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\DefaultJsonConverter.cs" />
     <Compile Include="Converters\HalEmbeddedResourceCollectionConverter.cs" />
     <Compile Include="Converters\HalEmbeddedResourceConverter.cs" />
     <Compile Include="Converters\HalLinkCollectionConverter.cs" />
-    <Compile Include="Converters\HalResourceConverter.cs" />
+    <Compile Include="Converters\HalDocumentConverter.cs" />
     <Compile Include="Extensions\ConversionExtensions.cs" />
     <Compile Include="HalEmbeddedResource.cs" />
     <Compile Include="HalEmbeddedResourceBuilder.cs" />
-    <Compile Include="HalResourceBuilder.cs" />
-    <Compile Include="HalResource.cs" />
+    <Compile Include="HalDocumentBuilder.cs" />
+    <Compile Include="HalDocument.cs" />
     <Compile Include="HalPropertyNames.cs" />
     <Compile Include="HalEmbeddedResourceCollection.cs" />
     <Compile Include="HalLink.cs" />
     <Compile Include="HalLinkCollection.cs" />
     <Compile Include="HalRelation.cs" />
     <Compile Include="IHalEmbeddedResourceBuilder.cs" />
-    <Compile Include="IHalResourceBuilder.cs" />
-    <Compile Include="IResource.cs" />
-    <Compile Include="MediaTypeFormatters\HalMediaTypeFormatter.cs" />
+    <Compile Include="IHalDocumentBuilder.cs" />
+    <Compile Include="IHalResource.cs" />
+    <Compile Include="MediaTypeFormatters\HalJsonMediaTypeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +71,7 @@
     <Content Include="Converters\TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -1,20 +1,31 @@
 ﻿using System;
 
 namespace Hal9000.Json.Net {
-    public sealed class HalEmbeddedResource {
-        private readonly HalResource _resource;
 
+    /// <summary>
+    /// An embedded resource.
+    /// </summary>
+    public sealed class HalEmbeddedResource {
+        private readonly HalDocument _document;
+
+        /// <summary>
+        /// Creates an instance of <see cref="HalEmbeddedResource"/>.
+        /// </summary>
+        /// <param name="embeddedResourceBuilder">An object that builds embedded resources.</param>
         public HalEmbeddedResource(IHalEmbeddedResourceBuilder embeddedResourceBuilder) {
             if (embeddedResourceBuilder == null) {
                 throw new ArgumentNullException("embeddedResourceBuilder");
             }
-            _resource = embeddedResourceBuilder.Build();
+            _document = embeddedResourceBuilder.Build();
 
         }
 
-        internal HalResource Resource {
+        /// <summary>
+        /// Gets the <see cref="HalDocument"/>.
+        /// </summary>
+        internal HalDocument Document {
             get {
-                return _resource;
+                return _document;
             }
         }
     }
