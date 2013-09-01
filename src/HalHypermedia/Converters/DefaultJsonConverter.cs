@@ -22,15 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 using System;
-using System.Globalization;
 using Newtonsoft.Json;
 
 namespace Hal9000.Json.Net.Converters {
 
     /// <summary>
-    /// A <see cref="JsonConverter"/> that can convert a <see cref="HalEmbeddedResourceCollection"/> to JSON.
+    /// A default JSON converter for all objects that are not a <see cref="HalDocument"/>.
     /// </summary>
-    internal sealed class HalEmbeddedResourceCollectionConverter : JsonConverter {
+    internal sealed class DefaultJsonConverter : JsonConverter {
 
         /// <summary>
         /// Serialize the given object to JSON.
@@ -39,22 +38,9 @@ namespace Hal9000.Json.Net.Converters {
         /// <param name="value">The target to serialize.</param>
         /// <param name="serializer">The serializer to use.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-
-            var embeddedResourceCollection = value as HalEmbeddedResourceCollection;
-
-            if (embeddedResourceCollection == null) {
-                const string format = "The target value is not of the expected type. Expected type: {0}";
-                throw new InvalidOperationException( String.Format( CultureInfo.InvariantCulture, format,
-                                                                  typeof( HalEmbeddedResourceCollection ).Name ) );
-            }
-           
-            writer.WriteStartObject();
-            foreach (var embeddedPair in embeddedResourceCollection) {
-
-                writer.WritePropertyName(embeddedPair.Key.Value);
-                serializer.Serialize(writer, embeddedPair.Value);
-            }
-            writer.WriteEndObject();
+            serializer.Converters.Remove(this);
+            serializer.Serialize(writer, value);
+            serializer.Converters.Add(this);
         }
 
         /// <summary>
@@ -75,7 +61,7 @@ namespace Hal9000.Json.Net.Converters {
         /// <param name="objectType">Target type.</param>
         /// <returns>True if the convert is able to convert the given type.</returns>
         public override bool CanConvert(Type objectType) {
-            return (typeof (HalEmbeddedResourceCollection)).IsAssignableFrom(objectType);
+            return (typeof(Object)).IsAssignableFrom(objectType);
         }
     }
 }
