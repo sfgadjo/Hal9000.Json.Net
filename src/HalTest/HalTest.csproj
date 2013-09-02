@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{47CF967D-ED96-47BC-9B75-245F0B03B8A5}</ProjectGuid>
+    <ProjectGuid>{9F2ED186-94B6-43DF-A297-1443DC88555C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hal9000.Json.Net</RootNamespace>
-    <AssemblyName>Hal9000.Json.Net</AssemblyName>
+    <RootNamespace>HalTest</RootNamespace>
+    <AssemblyName>HalTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -22,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,39 +30,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\DefaultJsonConverter.cs" />
-    <Compile Include="Converters\HalEmbeddedResourceCollectionConverter.cs" />
-    <Compile Include="Converters\HalEmbeddedResourceConverter.cs" />
-    <Compile Include="Converters\HalLinkCollectionConverter.cs" />
-    <Compile Include="Converters\HalDocumentConverter.cs" />
-    <Compile Include="Extensions\ConversionExtensions.cs" />
-    <Compile Include="FluentHalDocumentBuilder.cs" />
-    <Compile Include="HalEmbeddedResource.cs" />
-    <Compile Include="HalEmbeddedResourceBuilder.cs" />
-    <Compile Include="HalDocumentBuilder.cs" />
-    <Compile Include="HalDocument.cs" />
-    <Compile Include="HalPropertyNames.cs" />
-    <Compile Include="HalEmbeddedResourceCollection.cs" />
-    <Compile Include="HalLink.cs" />
-    <Compile Include="HalLinkCollection.cs" />
-    <Compile Include="HalRelation.cs" />
-    <Compile Include="IFluidHalDocumentBuilder.cs" />
-    <Compile Include="IHalEmbeddedResourceBuilder.cs" />
-    <Compile Include="IHalDocumentBuilder.cs" />
-    <Compile Include="IHalResource.cs" />
-    <Compile Include="MediaTypeFormatters\HalJsonMediaTypeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

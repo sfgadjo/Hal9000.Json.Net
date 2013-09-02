@@ -24,13 +24,11 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 
-namespace Hal9000.Json.Net
-{
+namespace Hal9000.Json.Net {
     /// <summary>
     /// Builds a <see cref="HalDocument"/>.
     /// </summary>
-    public sealed class HalDocumentBuilder : IHalDocumentBuilder
-    {
+    public sealed class HalDocumentBuilder : IHalDocumentBuilder {
         private readonly IHalResource _resource;
         private readonly HalLinkCollection _linkCollection;
         private readonly HalEmbeddedResourceCollection _embeddedResourceCollection;
@@ -39,10 +37,8 @@ namespace Hal9000.Json.Net
         /// Creates an instance of <see cref="HalDocumentBuilder"/>.
         /// </summary>
         /// <param name="resource">The hypermedia aware resource upon which to build the HAL document.</param>
-        public HalDocumentBuilder(IHalResource resource)
-        {
-            if (resource == null)
-            {
+        public HalDocumentBuilder(IHalResource resource) {
+            if (resource == null) {
                 throw new ArgumentNullException("resource");
             }
             _resource = resource;
@@ -64,14 +60,11 @@ namespace Hal9000.Json.Net
         /// <param name="relation">How the link is related to the resource.</param>
         /// <param name="link">A hypermedia link.</param>
         /// <returns>This <see cref="IHalDocumentBuilder"/> instance.</returns>
-        public IHalDocumentBuilder IncludeRelationWithSingleLink(HalRelation relation, HalLink link)
-        {
-            if (relation == null)
-            {
+        public IHalDocumentBuilder IncludeRelationWithSingleLink(HalRelation relation, HalLink link) {
+            if (relation == null) {
                 throw new ArgumentNullException("relation");
             }
-            if (link == null)
-            {
+            if (link == null) {
                 throw new ArgumentNullException("link");
             }
             _linkCollection.Add(relation, link);
@@ -95,14 +88,11 @@ namespace Hal9000.Json.Net
         /// <param name="relation">How the link is related to the resource.</param>
         /// <param name="links">A collection of hypermedia links.</param>
         /// <returns>This <see cref="IHalDocumentBuilder"/> instance.</returns>
-        public IHalDocumentBuilder IncludeRelationWithMultipleLinks(HalRelation relation, IEnumerable<HalLink> links)
-        {
-            if (relation == null)
-            {
+        public IHalDocumentBuilder IncludeRelationWithMultipleLinks(HalRelation relation, IEnumerable<HalLink> links) {
+            if (relation == null) {
                 throw new ArgumentNullException("relation");
             }
-            if (links == null)
-            {
+            if (links == null) {
                 throw new ArgumentNullException("links");
             }
             _linkCollection.Add(relation, links);
@@ -128,14 +118,12 @@ namespace Hal9000.Json.Net
         /// <param name="relation">How the embedded resource is related to the root resource.</param>
         /// <param name="embeddedResource">The embedded resource.</param>
         /// <returns>This <see cref="IHalDocumentBuilder"/> instance.</returns>
-        public IHalDocumentBuilder IncludeEmbeddedWithSingleResource ( HalRelation relation, HalEmbeddedResource embeddedResource )
-        {
-            if (relation == null)
-            {
+        public IHalDocumentBuilder IncludeEmbeddedWithSingleResource(HalRelation relation,
+                                                                     HalEmbeddedResource embeddedResource) {
+            if (relation == null) {
                 throw new ArgumentNullException("relation");
             }
-            if (embeddedResource == null)
-            {
+            if (embeddedResource == null) {
                 throw new ArgumentNullException("embeddedResource");
             }
             _embeddedResourceCollection.Add(relation, embeddedResource);
@@ -168,14 +156,13 @@ namespace Hal9000.Json.Net
         /// <param name="relation">How the embedded resource is related to the root resource.</param>
         /// <param name="embeddedResourcesresources">The embedded resources.</param>
         /// <returns>This <see cref="IHalDocumentBuilder"/> instance.</returns>
-        public IHalDocumentBuilder IncludeEmbeddedWithMultipleResources ( HalRelation relation, IEnumerable<HalEmbeddedResource> embeddedResourcesresources )
-        {
-            if (relation == null)
-            {
+        public IHalDocumentBuilder IncludeEmbeddedWithMultipleResources(HalRelation relation,
+                                                                        IEnumerable<HalEmbeddedResource>
+                                                                            embeddedResourcesresources) {
+            if (relation == null) {
                 throw new ArgumentNullException("relation");
             }
-            if (embeddedResourcesresources == null)
-            {
+            if (embeddedResourcesresources == null) {
                 throw new ArgumentNullException("embeddedResourcesresources");
             }
             _embeddedResourceCollection.Add(relation, embeddedResourcesresources);
@@ -186,15 +173,11 @@ namespace Hal9000.Json.Net
         /// Builds a <see cref="HalDocument"/> based on the operations executed on this builder.
         /// </summary>
         /// <returns>A <see cref="HalDocument"/>.</returns>
-        public HalDocument Build()
-        {
+        public HalDocument Build() {
             HalDocument result;
-            if (_embeddedResourceCollection.Count > 0)
-            {
+            if (_embeddedResourceCollection.Count > 0) {
                 result = new HalDocument(_resource, _linkCollection, _embeddedResourceCollection);
-            }
-            else
-            {
+            } else {
                 result = new HalDocument(_resource, _linkCollection);
             }
             return result;
