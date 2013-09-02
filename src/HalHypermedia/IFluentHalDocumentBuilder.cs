@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Hal9000.Json.Net.Fluent;
 
 namespace Hal9000.Json.Net {
 
     public interface IFluentHalDocumentBuilder : IBuild, IRelationBuilder {
     }
-
 }
 
 namespace Hal9000.Json.Net.Fluent {
@@ -26,12 +26,26 @@ namespace Hal9000.Json.Net.Fluent {
         IEmbeddedOperator WithEmbeddedRelation(string relationValue);
     }
 
-    public interface IEmbeddedOperator {
+    public interface IEmbeddedHaving {
         IEmbeddedRelationChoice Having { get; }
     }
 
-    public interface ILinkOperator {
+    public interface IEmbeddedCriteria {
+        IEmbeddedHaving When(Func<bool> predicate);
+    }
+
+    public interface IEmbeddedOperator : IEmbeddedHaving, IEmbeddedCriteria {
+    }
+
+    public interface ILinkHaving {
         ILinkChoice Having { get; }
+    }
+
+    public interface ILinkCriteria {
+        ILinkHaving When ( Func<bool> predicate );
+    }
+
+    public interface ILinkOperator : ILinkHaving, ILinkCriteria {
     }
 
     public interface ILinkJoiner : IBuild {
@@ -54,8 +68,15 @@ namespace Hal9000.Json.Net.Fluent {
         IResourceLinkOperator WithLinkRelation(string relationValue);
     }
 
-    public interface IResourceLinkOperator {
+    public interface IResourceCriteria {
+        IResourceHaving When ( Func<bool> predicate );
+    }
+
+    public interface IResourceHaving {
         IResourceLinkChoice Having { get; }
+    }
+
+    public interface IResourceLinkOperator : IResourceHaving , IResourceCriteria{
     }
 
     public interface IResourceLinkChoice {

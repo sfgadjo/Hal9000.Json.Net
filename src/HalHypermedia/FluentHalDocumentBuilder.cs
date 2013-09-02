@@ -6,7 +6,9 @@ using Hal9000.Json.Net.Fluent;
 namespace Hal9000.Json.Net {
     public class FluentHalDocumentBuilder : IFluentHalDocumentBuilder {
         private readonly IHalDocumentBuilder _documentBuilder;
-        private readonly IDictionary<HalRelation, IList<HalEmbeddedResource>> _embeddedResources = new Dictionary<HalRelation, IList<HalEmbeddedResource>>(); 
+
+        private readonly IDictionary<HalRelation, IList<HalEmbeddedResource>> _embeddedResources =
+            new Dictionary<HalRelation, IList<HalEmbeddedResource>>();
 
         public FluentHalDocumentBuilder(IHalResource resource) {
             if (resource == null) {
@@ -15,7 +17,10 @@ namespace Hal9000.Json.Net {
             _documentBuilder = new HalDocumentBuilder(resource);
         }
 
-        internal FluentHalDocumentBuilder ( IHalDocumentBuilder documentBuilder) {
+        internal FluentHalDocumentBuilder(IHalDocumentBuilder documentBuilder) {
+            if (documentBuilder == null) {
+                throw new ArgumentNullException("documentBuilder");
+            }
             _documentBuilder = documentBuilder;
         }
 
@@ -32,21 +37,16 @@ namespace Hal9000.Json.Net {
         }
 
         public HalDocument BuildDocument() {
-            
+
             foreach (var pair in _embeddedResources) {
                 int count = pair.Value.Count;
                 if (count > 1) {
                     _documentBuilder.IncludeEmbeddedWithMultipleResources(pair.Key, pair.Value);
-                }else if (count == 1) {
+                } else if (count == 1) {
                     _documentBuilder.IncludeEmbeddedWithSingleResource(pair.Key, pair.Value.First());
                 }
             }
             return _documentBuilder.Build();
-        }
-
-        public IRelationBuilder When(Func<bool> predicate) {
-            //TODO: this should move to end of flow
-            return this;
         }
 
         internal void addEmbeddedResource(HalRelation embeddedRelation,
@@ -62,9 +62,9 @@ namespace Hal9000.Json.Net {
 
             bool hasRelationAlready = _embeddedResources.TryGetValue(embeddedRelation, out resources);
             if (hasRelationAlready) {
-                resources.Add( embeddedResource );
+                resources.Add(embeddedResource);
             } else {
-                _embeddedResources.Add( embeddedRelation, new List<HalEmbeddedResource> { embeddedResource} );
+                _embeddedResources.Add(embeddedRelation, new List<HalEmbeddedResource> {embeddedResource});
             }
         }
 
@@ -91,50 +91,68 @@ namespace Hal9000.Json.Net {
     }
 
     public class EmbeddedOperator : IEmbeddedOperator {
+        private readonly bool _predicate;
         private readonly FluentHalDocumentBuilder _builder;
         private readonly HalRelation _relation;
 
-        internal EmbeddedOperator ( FluentHalDocumentBuilder builder, HalRelation relation ) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
+        internal EmbeddedOperator(FluentHalDocumentBuilder builder, HalRelation relation)
+            : this(builder, relation, true) {
+
+        }
+
+        private EmbeddedOperator ( FluentHalDocumentBuilder builder, HalRelation relation, bool predicate ) {
+            if ( builder == null ) {
+                throw new ArgumentNullException( "builder" );
             }
-            if (relation == null) {
-                throw new ArgumentNullException("relation");
+            if ( relation == null ) {
+                throw new ArgumentNullException( "relation" );
             }
             _builder = builder;
             _relation = relation;
+            _predicate = predicate;
         }
 
         public IEmbeddedRelationChoice Having {
-            get { return new EmbeddedRelationChoice(_builder, _relation); }
+            get { return new EmbeddedRelationChoice(_builder, _relation, _predicate); }
+        }
+
+        public IEmbeddedHaving When(Func<bool> predicate) {
+            if (predicate == null) {
+                throw new ArgumentNullException("predicate");
+            }
+
+            bool predicateResult = predicate();
+            return new EmbeddedOperator(_builder, _relation, predicateResult);
         }
     }
 
     public class EmbeddedRelationChoice : IEmbeddedRelationChoice {
         private readonly FluentHalDocumentBuilder _builder;
         private readonly HalRelation _embeddedRelation;
-
-        internal EmbeddedRelationChoice (FluentHalDocumentBuilder builder, HalRelation embeddedRelation) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
+        private readonly bool _predicate;
+        
+        internal EmbeddedRelationChoice(FluentHalDocumentBuilder builder, HalRelation embeddedRelation, bool predicate) {
+            if ( builder == null ) {
+                throw new ArgumentNullException( "builder" );
             }
             if ( embeddedRelation == null ) {
                 throw new ArgumentNullException( "embeddedRelation" );
             }
             _builder = builder;
             _embeddedRelation = embeddedRelation;
+            _predicate = predicate;
         }
 
         public IResourceLinkRelationOperator Resource(IHalResource resource) {
             if (resource == null) {
                 throw new ArgumentNullException("resource");
             }
-            var embeddedResourceBuilder = new HalEmbeddedResourceBuilder( resource );
-            return new ResourceLinkRelationOperator( _builder, embeddedResourceBuilder, _embeddedRelation );
+            var embeddedResourceBuilder = new HalEmbeddedResourceBuilder(resource);
+            return new ResourceLinkRelationOperator(_builder, embeddedResourceBuilder, _embeddedRelation, _predicate);
         }
 
         public IResourceOperator MultipleResources {
-            get { return new ResourceOperator(_builder, _embeddedRelation); }
+            get { return new ResourceOperator(_builder, _embeddedRelation, _predicate); }
         }
     }
 
@@ -142,9 +160,11 @@ namespace Hal9000.Json.Net {
         private readonly FluentHalDocumentBuilder _builder;
         private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
         private readonly HalRelation _embeddedRelation;
+        private readonly bool _predicate;
 
         internal ResourceLinkRelationOperator(FluentHalDocumentBuilder builder,
-                                              IHalEmbeddedResourceBuilder embeddedResourceBuilder, HalRelation embeddedRelation) {
+                                              IHalEmbeddedResourceBuilder embeddedResourceBuilder,
+                                              HalRelation embeddedRelation, bool predicate) {
             if (builder == null) {
                 throw new ArgumentNullException("builder");
             }
@@ -157,14 +177,17 @@ namespace Hal9000.Json.Net {
             _builder = builder;
             _embeddedResourceBuilder = embeddedResourceBuilder;
             _embeddedRelation = embeddedRelation;
+            _predicate = predicate;
         }
 
         public IResourceLinkOperator WithSelfRelation() {
-            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, _embeddedRelation, HalRelation.CreateSelfRelation());
+            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, _embeddedRelation,
+                                            HalRelation.CreateSelfRelation(), _predicate);
         }
 
         public IResourceLinkOperator WithLinkRelation(string relationValue) {
-            return new ResourceLinkOperator( _builder, _embeddedResourceBuilder, _embeddedRelation, new HalRelation(relationValue));
+            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, _embeddedRelation,
+                                            new HalRelation(relationValue), _predicate);
         }
     }
 
@@ -173,11 +196,12 @@ namespace Hal9000.Json.Net {
         private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
         private readonly HalRelation _embeddedRelation;
         private readonly HalRelation _linkRelation;
+        private readonly bool _predicate;
 
         internal ResourceLinkOperator(FluentHalDocumentBuilder builder,
                                       IHalEmbeddedResourceBuilder embeddedResourceBuilder, HalRelation embeddedRelation,
-                                      HalRelation linkRelation)
-            : this(builder, embeddedResourceBuilder, embeddedRelation) {
+                                      HalRelation linkRelation, bool predicate)
+            : this(builder, embeddedResourceBuilder, embeddedRelation, predicate) {
 
             if (linkRelation == null) {
                 throw new ArgumentNullException("linkRelation");
@@ -187,7 +211,99 @@ namespace Hal9000.Json.Net {
         }
 
         internal ResourceLinkOperator(FluentHalDocumentBuilder builder,
-                                    IHalEmbeddedResourceBuilder embeddedResourceBuilder, HalRelation embeddedRelation ) {
+                                      IHalEmbeddedResourceBuilder embeddedResourceBuilder, HalRelation embeddedRelation,
+                                      bool predicate) {
+            if (builder == null) {
+                throw new ArgumentNullException("builder");
+            }
+            if (embeddedResourceBuilder == null) {
+                throw new ArgumentNullException("embeddedResourceBuilder");
+            }
+            if (embeddedRelation == null) {
+                throw new ArgumentNullException("embeddedRelation");
+            }
+
+            _builder = builder;
+            _embeddedResourceBuilder = embeddedResourceBuilder;
+            _embeddedRelation = embeddedRelation;
+            _predicate = predicate;
+        }
+
+        public IResourceLinkChoice Having {
+            get { return new ResourceLinkChoice(_builder, _embeddedResourceBuilder, _embeddedRelation, _linkRelation, _predicate); }
+        }
+
+        public IResourceHaving When(Func<bool> predicate) {
+            if (predicate == null) {
+                throw new ArgumentNullException("predicate");
+            }
+            bool predicateResult = predicate();
+            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, _embeddedRelation, _linkRelation,
+                                            predicateResult );
+        }
+    }
+
+    public class ResourceLinkChoice : IResourceLinkChoice {
+        private readonly FluentHalDocumentBuilder _builder;
+        private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
+        private readonly HalRelation _embeddedRelation;
+        private readonly HalRelation _linkRelation;
+        private readonly bool _predicate;
+
+        internal ResourceLinkChoice ( FluentHalDocumentBuilder builder, IHalEmbeddedResourceBuilder embeddedResourceBuilder,
+                                  HalRelation embeddedRelation, HalRelation linkRelation, bool predicate) {
+            if (builder == null) {
+                throw new ArgumentNullException("builder");
+            }
+            if (embeddedResourceBuilder == null) {
+                throw new ArgumentNullException("embeddedResourceBuilder");
+            }
+            if (embeddedRelation == null) {
+                throw new ArgumentNullException("embeddedRelation");
+            }
+            if (linkRelation == null) {
+                throw new ArgumentNullException("linkRelation");
+            }
+
+            _builder = builder;
+            _embeddedResourceBuilder = embeddedResourceBuilder;
+            _embeddedRelation = embeddedRelation;
+            _linkRelation = linkRelation;
+            _predicate = predicate;
+        }
+
+        public IEmbeddedJoiner Link(HalLink link) {
+            if (link == null) {
+                throw new ArgumentNullException("link");
+            }
+
+            if (_predicate) {
+                _embeddedResourceBuilder.IncludeRelationWithSingleLink(_linkRelation, link);
+            }
+
+            return new EmbeddedJoiner(_builder, _embeddedResourceBuilder, _embeddedRelation, _predicate);
+        }
+
+        public IEmbeddedJoiner Links(IEnumerable<HalLink> links) {
+            if (links == null) {
+                throw new ArgumentNullException("links");
+            }
+
+            if (_predicate){
+                _embeddedResourceBuilder.IncludeRelationWithMultipleLinks(_linkRelation, links);
+            }
+            return new EmbeddedJoiner(_builder, _embeddedResourceBuilder, _embeddedRelation, _predicate);
+        }
+    }
+
+    public class EmbeddedJoiner : IEmbeddedJoiner {
+        private readonly FluentHalDocumentBuilder _builder;
+        private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
+        private readonly HalRelation _embeddedRelation;
+        private readonly bool _predicate;
+
+        internal EmbeddedJoiner ( FluentHalDocumentBuilder builder, IHalEmbeddedResourceBuilder embeddedResourceBuilder,
+                              HalRelation embeddedRelation, bool predicate) {
             if ( builder == null ) {
                 throw new ArgumentNullException( "builder" );
             }
@@ -200,78 +316,7 @@ namespace Hal9000.Json.Net {
             _builder = builder;
             _embeddedResourceBuilder = embeddedResourceBuilder;
             _embeddedRelation = embeddedRelation;
-        }
-
-        public IResourceLinkChoice Having {
-            get { return new ResourceLinkChoice(_builder, _embeddedResourceBuilder, _embeddedRelation, _linkRelation); }
-        }
-    }
-
-    public class ResourceLinkChoice : IResourceLinkChoice {
-        private readonly FluentHalDocumentBuilder _builder;
-        private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
-        private readonly HalRelation _embeddedRelation;
-        private readonly HalRelation _linkRelation;
-
-        internal ResourceLinkChoice(FluentHalDocumentBuilder builder, IHalEmbeddedResourceBuilder embeddedResourceBuilder,
-                                    HalRelation embeddedRelation, HalRelation linkRelation) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
-            }
-            if (embeddedResourceBuilder == null) {
-                throw new ArgumentNullException("embeddedResourceBuilder");
-            }
-            if (embeddedRelation == null) {
-                throw new ArgumentNullException("embeddedRelation");
-            }
-            if (linkRelation == null) {
-                throw new ArgumentNullException("linkRelation");
-            }
-            _builder = builder;
-            _embeddedResourceBuilder = embeddedResourceBuilder;
-            _embeddedRelation = embeddedRelation;
-            _linkRelation = linkRelation;
-        }
-
-        public IEmbeddedJoiner Link(HalLink link) {
-            if (link == null) {
-                throw new ArgumentNullException("link");
-            }
-
-            _embeddedResourceBuilder.IncludeRelationWithSingleLink(_linkRelation, link);
-
-            return new EmbeddedJoiner(_builder, _embeddedResourceBuilder, _embeddedRelation);
-        }
-
-        public IEmbeddedJoiner Links(IEnumerable<HalLink> links) {
-            if (links == null) {
-                throw new ArgumentNullException("links");
-            }
-
-            _embeddedResourceBuilder.IncludeRelationWithMultipleLinks( _linkRelation, links );
-            return new EmbeddedJoiner( _builder,  _embeddedResourceBuilder, _embeddedRelation );
-        }
-    }
-
-    public class EmbeddedJoiner : IEmbeddedJoiner {
-        private readonly FluentHalDocumentBuilder _builder;
-        private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
-        private readonly HalRelation _embeddedRelation;
-
-        internal EmbeddedJoiner(FluentHalDocumentBuilder builder, IHalEmbeddedResourceBuilder embeddedResourceBuilder,
-                                HalRelation embeddedRelation) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
-            }
-            if (embeddedResourceBuilder == null) {
-                throw new ArgumentNullException("embeddedResourceBuilder");
-            }
-            if (embeddedRelation == null) {
-                throw new ArgumentNullException("embeddedRelation");
-            }
-            _builder = builder;
-            _embeddedResourceBuilder = embeddedResourceBuilder;
-            _embeddedRelation = embeddedRelation;
+            _predicate = predicate;
         }
 
         public HalDocument BuildDocument() {
@@ -280,9 +325,7 @@ namespace Hal9000.Json.Net {
         }
 
         public IEmbeddedResourceChoice Also {
-            get {
-                return new EmbeddedResourceChoice(_builder, _embeddedRelation, _embeddedResourceBuilder);
-            }
+            get { return new EmbeddedResourceChoice(_builder, _embeddedRelation, _embeddedResourceBuilder, _predicate); }
         }
 
         public IRelationBuilder And {
@@ -294,7 +337,9 @@ namespace Hal9000.Json.Net {
         }
 
         private void addEmbeddedResourceToDocument() {
-            _builder.addEmbeddedResource( _embeddedRelation, _embeddedResourceBuilder );
+            if (_predicate) {
+                _builder.addEmbeddedResource(_embeddedRelation, _embeddedResourceBuilder);
+            }
         }
     }
 
@@ -302,29 +347,33 @@ namespace Hal9000.Json.Net {
         private readonly FluentHalDocumentBuilder _builder;
         private readonly HalRelation _embeddedRelation;
         private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
+        private readonly bool _predicate;
 
         internal EmbeddedResourceChoice(FluentHalDocumentBuilder builder, HalRelation embeddedRelation,
-                                        IHalEmbeddedResourceBuilder embeddedResourceBuilder) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
+                                      IHalEmbeddedResourceBuilder embeddedResourceBuilder, bool predicate) {
+            if ( builder == null ) {
+                throw new ArgumentNullException( "builder" );
             }
-            if (embeddedRelation == null) {
-                throw new ArgumentNullException("embeddedRelation");
+            if ( embeddedRelation == null ) {
+                throw new ArgumentNullException( "embeddedRelation" );
             }
-            if (embeddedResourceBuilder == null) {
-                throw new ArgumentNullException("embeddedResourceBuilder");
+            if ( embeddedResourceBuilder == null ) {
+                throw new ArgumentNullException( "embeddedResourceBuilder" );
             }
             _builder = builder;
             _embeddedRelation = embeddedRelation;
             _embeddedResourceBuilder = embeddedResourceBuilder;
+            _predicate = predicate;
         }
 
         public IResourceLinkOperator WithSelfRelation() {
-            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, _embeddedRelation, HalRelation.CreateSelfRelation());
+            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, _embeddedRelation,
+                                            HalRelation.CreateSelfRelation(), _predicate);
         }
 
         public IResourceLinkOperator WithLinkRelation(string relationValue) {
-            return new ResourceLinkOperator( _builder, _embeddedResourceBuilder, _embeddedRelation, new HalRelation(relationValue) );
+            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, _embeddedRelation,
+                                            new HalRelation(relationValue), _predicate);
         }
 
         public IResourceLinkRelationOperator Resource(IHalResource resource) {
@@ -333,19 +382,40 @@ namespace Hal9000.Json.Net {
             }
             //add the embedded resource we have been building, then create a new resource builder
             //to start again under the same relation.
+            if (_predicate) {
+                _builder.addEmbeddedResource(_embeddedRelation, _embeddedResourceBuilder);
+            }
 
-            _builder.addEmbeddedResource(_embeddedRelation, _embeddedResourceBuilder);
             var embeddedResourceBuilder = new HalEmbeddedResourceBuilder(resource);
-            return new ResourceLinkRelationOperator(_builder, embeddedResourceBuilder, _embeddedRelation);
+            return new ResourceLinkRelationOperator(_builder, embeddedResourceBuilder, _embeddedRelation, _predicate);
         }
     }
 
     public class ResourceOperator : IResourceOperator {
         private readonly FluentHalDocumentBuilder _builder;
         private readonly HalRelation _embeddedRelation;
+        private readonly bool _predicate;
         private readonly IHalEmbeddedResourceBuilder _embeddedResourceBuilder;
 
-        internal ResourceOperator ( FluentHalDocumentBuilder builder, HalRelation embeddedRelation) {
+        internal ResourceOperator ( FluentHalDocumentBuilder builder, HalRelation embeddedRelation,
+                                 IHalEmbeddedResourceBuilder embeddedResourceBuilder, bool predicate ) {
+            if ( builder == null ) {
+                throw new ArgumentNullException( "builder" );
+            }
+
+            if ( embeddedRelation == null ) {
+                throw new ArgumentNullException( "embeddedRelation" );
+            }
+            if ( embeddedResourceBuilder == null ) {
+                throw new ArgumentNullException( "embeddedResourceBuilder" );
+            }
+            _builder = builder;
+            _embeddedRelation = embeddedRelation;
+            _embeddedResourceBuilder = embeddedResourceBuilder;
+            _predicate = predicate;
+        }
+
+        internal ResourceOperator(FluentHalDocumentBuilder builder, HalRelation embeddedRelation, bool predicate) {
             if ( builder == null ) {
                 throw new ArgumentNullException( "builder" );
             }
@@ -355,88 +425,95 @@ namespace Hal9000.Json.Net {
             }
             _builder = builder;
             _embeddedRelation = embeddedRelation;
+            _predicate = predicate;
         }
 
-        internal ResourceOperator(FluentHalDocumentBuilder builder, HalRelation embeddedRelation,
-                                  IHalEmbeddedResourceBuilder embeddedResourceBuilder) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
-            }
-
-            if (embeddedRelation == null) {
-                throw new ArgumentNullException("embeddedRelation");
-            }
-            if (embeddedResourceBuilder == null) {
-                throw new ArgumentNullException("embeddedResourceBuilder");
-            }
-            _builder = builder;
-            _embeddedRelation = embeddedRelation;
-            _embeddedResourceBuilder = embeddedResourceBuilder;
-        }
-
-        public IResourceLinkRelationOperator Resource ( IHalResource resource) {
-            if ( resource == null ) {
-                throw new ArgumentNullException( "resource" );
+        public IResourceLinkRelationOperator Resource(IHalResource resource) {
+            if (resource == null) {
+                throw new ArgumentNullException("resource");
             }
             var embeddedResourceBuilder = new HalEmbeddedResourceBuilder(resource);
 
-            return new ResourceLinkRelationOperator( _builder, embeddedResourceBuilder, _embeddedRelation );
+            return new ResourceLinkRelationOperator( _builder, embeddedResourceBuilder, _embeddedRelation, _predicate );
         }
 
         public IResourceLinkOperator WithSelfRelation() {
-            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, HalRelation.CreateSelfRelation());
+            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, HalRelation.CreateSelfRelation(), _predicate);
         }
 
         public IResourceLinkOperator WithLinkRelation(string relationValue) {
-            return new ResourceLinkOperator(_builder, _embeddedResourceBuilder, new HalRelation(relationValue));
+            return new ResourceLinkOperator( _builder, _embeddedResourceBuilder, new HalRelation( relationValue ), _predicate);
         }
     }
 
     public class LinkOperator : ILinkOperator {
         private readonly FluentHalDocumentBuilder _builder;
         private readonly HalRelation _relation;
+        private readonly bool _predicate;
 
-        internal LinkOperator ( FluentHalDocumentBuilder builder, HalRelation relation ) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
+        internal LinkOperator(FluentHalDocumentBuilder builder, HalRelation relation) : this(builder, relation, true) {
+           
+        }
+
+        private LinkOperator(FluentHalDocumentBuilder builder, HalRelation relation, bool predicate) {
+            if ( builder == null ) {
+                throw new ArgumentNullException( "builder" );
             }
-            if (relation == null) {
-                throw new ArgumentNullException("relation");
+            if ( relation == null ) {
+                throw new ArgumentNullException( "relation" );
             }
+
             _builder = builder;
             _relation = relation;
+            _predicate = predicate;
         }
 
         public ILinkChoice Having {
-            get { return new LinkChoice(_builder, _relation); }
+            get { return new LinkChoice(_builder, _relation, _predicate); }
+        }
+
+        public ILinkHaving When(Func<bool> predicate) {
+            if (predicate == null) {
+                throw new ArgumentNullException("predicate");
+            }
+
+            bool predicateResult = predicate();
+            return new LinkOperator( _builder, _relation, predicateResult );
         }
     }
 
     public class LinkChoice : ILinkChoice {
         private readonly FluentHalDocumentBuilder _builder;
         private readonly HalRelation _relation;
+        private readonly bool _predicate;
 
-        internal LinkChoice ( FluentHalDocumentBuilder builder, HalRelation relation ) {
-            if (builder == null) {
-                throw new ArgumentNullException("builder");
+        internal LinkChoice ( FluentHalDocumentBuilder builder, HalRelation relation, bool predicate ) {
+            if ( builder == null ) {
+                throw new ArgumentNullException( "builder" );
             }
-            if (relation == null) {
-                throw new ArgumentNullException("relation");
+            if ( relation == null ) {
+                throw new ArgumentNullException( "relation" );
             }
+
             _builder = builder;
             _relation = relation;
+            _predicate = predicate;
         }
 
         public ILinkJoiner Link(HalLink link) {
             if (link == null) {
                 throw new ArgumentNullException("link");
             }
-            _builder.includeRelationWithSingleLink(_relation, link);
-            return new LinkJoiner( _builder );
+            if (_predicate) {
+                _builder.includeRelationWithSingleLink(_relation, link);
+            }
+            return new LinkJoiner(_builder);
         }
 
         public ILinkJoiner Links(IEnumerable<HalLink> links) {
-            _builder.includeRelationWithMultipleLinks(_relation, links);
+            if (_predicate) {
+                _builder.includeRelationWithMultipleLinks(_relation, links);
+            }
             return new LinkJoiner(_builder);
         }
     }
@@ -444,7 +521,7 @@ namespace Hal9000.Json.Net {
     public class LinkJoiner : ILinkJoiner {
         private readonly FluentHalDocumentBuilder _builder;
 
-        internal LinkJoiner ( FluentHalDocumentBuilder builder ) {
+        internal LinkJoiner(FluentHalDocumentBuilder builder) {
             if (builder == null) {
                 throw new ArgumentNullException("builder");
             }

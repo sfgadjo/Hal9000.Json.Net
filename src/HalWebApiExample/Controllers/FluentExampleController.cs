@@ -10,8 +10,11 @@ namespace HalWebApiExample.Controllers
 {
     public class FluentExampleController : ApiController
     {
-        public HttpResponseMessage Get(HttpRequestMessage request)
+        public HttpResponseMessage Get(HttpRequestMessage request, bool? predicate )
         {
+            if (!predicate.HasValue) {
+                predicate = true;
+            }
              //this will be our embedded resource.
             var customer = new Customer
                 {
@@ -31,7 +34,7 @@ namespace HalWebApiExample.Controllers
 
             HalDocument document =
                 builder
-                    .WithSelfRelation()
+                    .WithSelfRelation().When( () => predicate.Value )
                        .Having.Link(new HalLink("/orderlogs/123"))
                     .And
                         .WithLinkRelation("archive")
@@ -41,7 +44,7 @@ namespace HalWebApiExample.Controllers
                                    new HalLink("m/orderlogs/archive") {Profile = "http://profiles.mydomain.com/mobile/"}
                                })
                        .And
-                            .WithEmbeddedRelation("customer")
+                            .WithEmbeddedRelation( "customer" ).When( () => predicate.Value )
                             .Having.Resource(customer)
                                 .WithSelfRelation()
                                     .Having.Link(new HalLink("/customer/112")
