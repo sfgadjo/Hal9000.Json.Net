@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Hal9000.Json.Net.Fluent;
 
 namespace Hal9000.Json.Net {
 
-    public interface IFluentHalDocumentBuilder : IBuild, IRelationBuilder, IWhen {
+    public interface IFluentHalDocumentBuilder : IBuild, IRelationBuilder {
     }
 
 }
@@ -13,10 +12,6 @@ namespace Hal9000.Json.Net.Fluent {
     
     public interface IBuild {
         HalDocument BuildDocument();
-    }
-
-    public interface IWhen {
-        IRelationBuilder When(Func<bool> predicate);
     }
 
     public interface IRelationBuilder : ILinkRelationOperator, IEmbeddedRelationOperator {

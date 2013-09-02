@@ -49,10 +49,6 @@ namespace Hal9000.Json.Net {
             return this;
         }
 
-        //internal IHalDocumentBuilder documentBuilder {
-        //    get { return _documentBuilder; }
-        //}
-
         internal void addEmbeddedResource(HalRelation embeddedRelation,
                                           IHalEmbeddedResourceBuilder embeddedResourceBuilder) {
             if (embeddedRelation == null) {
