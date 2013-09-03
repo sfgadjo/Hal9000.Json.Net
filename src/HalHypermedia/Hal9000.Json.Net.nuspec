@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Hal9000.Json.Net</id>
+    <version>1.0</version>
+    <title>Hal9000.Json.Net</title>
+    <authors>Trevel Beshore</authors>
+    <owners>Trevel Beshore</owners>
+    <licenseUrl>https://github.com/sfgadjo/Hal9000.Json.Net/blob/develop/MITLicense.txt</licenseUrl>
+    <projectUrl>https://github.com/sfgadjo/Hal9000.Json.Net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      Library for serializing HAL formatted hypermedia to JSON. This is intended for use with REST services implemented with the ASP.NET Web Api.
+    </description>
+    <copyright>Copyright Trevel Beshore 2013</copyright>
+    <tags>.NET WebApi JSON HAL</tags>
+  </metadata>
+</package>

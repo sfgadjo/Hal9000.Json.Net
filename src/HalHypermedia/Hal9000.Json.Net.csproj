@@ -40,7 +40,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\DefaultJsonConverter.cs" />
@@ -50,6 +53,38 @@
     <Compile Include="Converters\HalDocumentConverter.cs" />
     <Compile Include="Extensions\ConversionExtensions.cs" />
     <Compile Include="FluentHalDocumentBuilder.cs" />
+    <Compile Include="Fluent\LinkJoiner.cs" />
+    <Compile Include="Fluent\EmbeddedJoiner.cs" />
+    <Compile Include="Fluent\EmbeddedOperator.cs" />
+    <Compile Include="Fluent\EmbeddedRelationChoice.cs" />
+    <Compile Include="Fluent\EmbeddedResourceChoice.cs" />
+    <Compile Include="Fluent\Interfaces\IEmbeddedCriteria.cs" />
+    <Compile Include="Fluent\Interfaces\IEmbeddedHaving.cs" />
+    <Compile Include="Fluent\Interfaces\IEmbeddedJoiner.cs" />
+    <Compile Include="Fluent\Interfaces\IEmbeddedOperator.cs" />
+    <Compile Include="Fluent\Interfaces\IEmbeddedRelationChoice.cs" />
+    <Compile Include="Fluent\Interfaces\IEmbeddedRelationOperator.cs" />
+    <Compile Include="Fluent\Interfaces\IEmbeddedResourceChoice.cs" />
+    <Compile Include="Fluent\Interfaces\ILinkChoice.cs" />
+    <Compile Include="Fluent\Interfaces\ILinkCriteria.cs" />
+    <Compile Include="Fluent\Interfaces\ILinkHaving.cs" />
+    <Compile Include="Fluent\Interfaces\ILinkJoiner.cs" />
+    <Compile Include="Fluent\Interfaces\ILinkOperator.cs" />
+    <Compile Include="Fluent\Interfaces\ILinkRelationOperator.cs" />
+    <Compile Include="Fluent\Interfaces\IRelationBuilder.cs" />
+    <Compile Include="Fluent\Interfaces\IResourceCriteria.cs" />
+    <Compile Include="Fluent\Interfaces\IResourceHaving.cs" />
+    <Compile Include="Fluent\Interfaces\IResourceLinkChoice.cs" />
+    <Compile Include="Fluent\Interfaces\IResourceLinkOperator.cs" />
+    <Compile Include="Fluent\Interfaces\IResourceLinkRelationOperator.cs" />
+    <Compile Include="Fluent\Interfaces\IResourceOperator.cs" />
+    <Compile Include="Fluent\Interfaces\IResourcesOperator.cs" />
+    <Compile Include="Fluent\LinkChoice.cs" />
+    <Compile Include="Fluent\LinkOperator.cs" />
+    <Compile Include="Fluent\ResourceLinkChoice.cs" />
+    <Compile Include="Fluent\ResourceLinkOperator.cs" />
+    <Compile Include="Fluent\ResourceLinkRelationOperator.cs" />
+    <Compile Include="Fluent\ResourceOperator.cs" />
     <Compile Include="HalEmbeddedResource.cs" />
     <Compile Include="HalEmbeddedResourceBuilder.cs" />
     <Compile Include="HalDocumentBuilder.cs" />
@@ -59,6 +94,7 @@
     <Compile Include="HalLink.cs" />
     <Compile Include="HalLinkCollection.cs" />
     <Compile Include="HalRelation.cs" />
+    <Compile Include="Fluent\Interfaces\IBuild.cs" />
     <Compile Include="IFluentHalDocumentBuilder.cs" />
     <Compile Include="IHalEmbeddedResourceBuilder.cs" />
     <Compile Include="IHalDocumentBuilder.cs" />
@@ -67,6 +103,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Hal9000.Json.Net.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
