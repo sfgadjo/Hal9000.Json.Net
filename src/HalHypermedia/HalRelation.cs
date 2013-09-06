@@ -41,9 +41,6 @@ namespace Hal9000.Json.Net {
                 throw new ArgumentException( "relation cannot be null or empty.", "relation" );
             }
 
-            if ( relation.Contains( " " ) ) {
-                throw new InvalidOperationException( "relation cannot contain any of the" );
-            }
             _value = relation;
         }
 
