@@ -1,8 +1,7 @@
 ﻿using System;
-using Hal9000.Json.Net;
 using NUnit.Framework;
 
-namespace HalTest {
+namespace Hal9000.Json.Net.Test {
 
     [TestFixture]
     public class HalRelationTest {

@@ -26,6 +26,7 @@ using System.Globalization;
 using System.Linq;
 using Hal9000.Json.Net.Extensions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Hal9000.Json.Net.Converters
 {
@@ -63,7 +64,7 @@ namespace Hal9000.Json.Net.Converters
                 var propertyValue = s.GetValue(resource, null);
                 if (propertyValue != null)
                 {
-                    string propertyName = s.GetJsonPropertyName();
+                    string propertyName = s.GetJsonPropertyName(serializer.ContractResolver);
                     writer.WritePropertyName(propertyName);
                     serializer.Serialize(writer, propertyValue);
                 }

@@ -25,6 +25,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Hal9000.Json.Net.Extensions {
 
@@ -58,13 +59,20 @@ namespace Hal9000.Json.Net.Extensions {
         /// Note: Makes use of <see cref="JsonPropertyAttribute"/> if the property has been decorated with that attribute.
         /// </summary>
         /// <param name="target">The <see cref="MemberInfo"/> from which to get the property name.</param>
+        /// <param name="contractResolver">An object that resolves JSON contracts for a given type.</param>
         /// <returns>A property name.</returns>
-        public static string GetJsonPropertyName(this MemberInfo target) {
+        public static string GetJsonPropertyName(this MemberInfo target, IContractResolver contractResolver) {
             if (target == null) {
                 throw new ArgumentNullException("target");
             }
 
-            string propertyName = target.Name.ConvertToCamelCase();
+            string propertyName;
+            if (contractResolver is CamelCasePropertyNamesContractResolver) {
+                propertyName = target.Name.ConvertToCamelCase();
+            } else {
+                propertyName = target.Name;
+            }
+
             var jsonPropertyAttribute =
                 (JsonPropertyAttribute)
                 target.GetCustomAttributes(typeof (JsonPropertyAttribute), true).FirstOrDefault();

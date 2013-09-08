@@ -7,8 +7,8 @@
     <ProjectGuid>{9F2ED186-94B6-43DF-A297-1443DC88555C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HalTest</RootNamespace>
-    <AssemblyName>HalTest</AssemblyName>
+    <RootNamespace>Hal9000.Json.Net.Test</RootNamespace>
+    <AssemblyName>Hal9000.Json.Net.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -34,6 +34,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.1.1309.0801\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -43,13 +46,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\HalEmbeddedResourceConverterTest.cs" />
+    <Compile Include="Converters\HalLinkCollectionConverterTest.cs" />
     <Compile Include="HalRelationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,7 +58,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HalHypermedia\Hal9000.Json.Net.csproj">
+    <ProjectReference Include="..\Hal9000\Hal9000.Json.Net.csproj">
       <Project>{47cf967d-ed96-47bc-9b75-245f0b03b8a5}</Project>
       <Name>Hal9000.Json.Net</Name>
     </ProjectReference>

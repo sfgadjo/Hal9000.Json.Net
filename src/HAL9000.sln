@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hal9000.Json.Net", "HalHypermedia\Hal9000.Json.Net.csproj", "{47CF967D-ED96-47BC-9B75-245F0B03B8A5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CD49A79D-2446-4A11-9D65-7E18936D93E9}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -12,7 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CD49A7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalWebApiExample", "HalWebApiExample\HalWebApiExample.csproj", "{26C58870-CD7C-4787-93A8-89C59BE384D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalTest", "HalTest\HalTest.csproj", "{9F2ED186-94B6-43DF-A297-1443DC88555C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hal9000.Json.Net", "Hal9000\Hal9000.Json.Net.csproj", "{47CF967D-ED96-47BC-9B75-245F0B03B8A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hal9000.Json.Net.Test", "Hal9000.Test\Hal9000.Json.Net.Test.csproj", "{9F2ED186-94B6-43DF-A297-1443DC88555C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,14 +20,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26C58870-CD7C-4787-93A8-89C59BE384D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47CF967D-ED96-47BC-9B75-245F0B03B8A5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F2ED186-94B6-43DF-A297-1443DC88555C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F2ED186-94B6-43DF-A297-1443DC88555C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F2ED186-94B6-43DF-A297-1443DC88555C}.Release|Any CPU.ActiveCfg = Release|Any CPU
