@@ -28,7 +28,7 @@ namespace Hal9000.Json.Net {
     /// <summary>
     /// An embedded resource.
     /// </summary>
-    public sealed class HalEmbeddedResource {
+    public class HalEmbeddedResource {
         private readonly HalDocument _document;
 
         /// <summary>
@@ -44,9 +44,24 @@ namespace Hal9000.Json.Net {
         }
 
         /// <summary>
+        /// Creates an instance of <see cref="HalEmbeddedResource"/>.
+        /// </summary>
+        /// <remarks>This constructor is helpful for testing as a consuming project can create a wrapper object and access the internals. This does run the risk of coupling your tests to the internals of the library.</remarks>
+        /// <param name="embeddedResource">The embedded resource with which to initialize this instance.</param>
+        protected internal HalEmbeddedResource(HalEmbeddedResource embeddedResource)
+        {
+            if (embeddedResource == null)
+            {
+                throw new ArgumentNullException("embeddedResource");
+            }
+
+            _document = embeddedResource.Document;
+        }
+
+        /// <summary>
         /// Gets the <see cref="HalDocument"/>.
         /// </summary>
-        internal HalDocument Document {
+        protected internal HalDocument Document {
             get {
                 return _document;
             }

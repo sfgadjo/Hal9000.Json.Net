@@ -23,11 +23,11 @@ THE SOFTWARE.
  */
 using System.Collections.Generic;
 
-namespace Hal9000.Json.Net {
+namespace Hal9000.Json.Net.Impl {
 
     /// <summary>
-    /// A collection of HAL links.
+    /// A collection of <see cref="HalEmbeddedResource"/> objects.
     /// </summary>
-    internal sealed class HalLinkCollection :  Dictionary<HalRelation,object> {
+    public sealed class HalEmbeddedResourceCollection : Dictionary<HalRelation, object> {
     }
 }

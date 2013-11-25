@@ -23,6 +23,7 @@ THE SOFTWARE.
  */
 using System;
 using System.Globalization;
+using Hal9000.Json.Net.Impl;
 using Newtonsoft.Json;
 
 namespace Hal9000.Json.Net.Converters {

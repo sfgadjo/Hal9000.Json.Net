@@ -23,6 +23,7 @@ THE SOFTWARE.
  */
 using System;
 using System.Collections.Generic;
+using Hal9000.Json.Net.Impl;
 
 namespace Hal9000.Json.Net {
 

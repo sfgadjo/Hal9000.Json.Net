@@ -21,11 +21,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
+
+using System;
+using Hal9000.Json.Net.Impl;
+
 namespace Hal9000.Json.Net {
     /// <summary>
     /// A document that follows the conventions of the Hypermedia Application Language.
     /// </summary>
-    public sealed class HalDocument {
+    public class HalDocument {
         private readonly HalEmbeddedResourceCollection _embeddedResourceCollection;
         private readonly IHalResource _resource;
         private readonly HalLinkCollection _linkCollection;
@@ -33,9 +37,34 @@ namespace Hal9000.Json.Net {
         /// <summary>
         /// Creates an instance of <see cref="HalDocument"/>.
         /// </summary>
+        /// <remarks>This constructor is useful for unit testing your hypermedia. You can create a subclass and pass in the <see cref="HalDocument"/> that is created with on of the builders to get access to the internals of this class. This was done so that the inteface of this is clean and abstract as of the internals of how the hypermedia are created should not be of concern to users of the library. We still need ways that users can access the internals for testing reasons, and this design facilitates that.</remarks>
+        /// <param name="document">An existing <see cref="HalDocument"/> from which to initialize this instance.</param>
+        protected internal HalDocument(HalDocument document)
+        {
+            if (document == null)
+            {
+                throw new ArgumentNullException("document");
+            }
+
+            _embeddedResourceCollection = document.embeddedResourceCollection;
+            _resource = document.resource;
+            _linkCollection = document.linkCollection;
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="HalDocument"/>.
+        /// </summary>
         /// <param name="resource">The hypermedia aware resource.</param>
         /// <param name="linkCollection">A collection of hypermedia links.</param>
-        internal HalDocument(IHalResource resource, HalLinkCollection linkCollection) {
+        protected internal HalDocument(IHalResource resource, HalLinkCollection linkCollection) {
+            if (resource == null)
+            {
+                throw new ArgumentNullException("resource");
+            }
+            if (linkCollection == null)
+            {
+                throw new ArgumentNullException("linkCollection");
+            }
             _resource = resource;
             _linkCollection = linkCollection;
         }
@@ -46,30 +75,35 @@ namespace Hal9000.Json.Net {
         /// <param name="resource">The hypermedia aware resource.</param>
         /// <param name="linkCollection">A collection of hypermedia links.</param>
         /// <param name="embeddedResourceCollection">A collection of embedded resources.</param>
-        internal HalDocument(IHalResource resource, HalLinkCollection linkCollection,
+        protected internal HalDocument(IHalResource resource, HalLinkCollection linkCollection,
                              HalEmbeddedResourceCollection embeddedResourceCollection)
-            : this(resource, linkCollection) {
+            : this(resource, linkCollection)
+        {
+            if (embeddedResourceCollection == null)
+            {
+                throw new ArgumentNullException("embeddedResourceCollection");
+            }
             _embeddedResourceCollection = embeddedResourceCollection;
         }
 
         /// <summary>
         /// Gets the collection of embedded resources.
         /// </summary>
-        internal HalEmbeddedResourceCollection embeddedResourceCollection {
+        protected internal HalEmbeddedResourceCollection embeddedResourceCollection {
             get { return _embeddedResourceCollection; }
         }
 
         /// <summary>
         /// Gets the hypermedia aware resource that is the root of this document.
         /// </summary>
-        internal IHalResource resource {
+        protected internal IHalResource resource {
             get { return _resource; }
         }
 
         /// <summary>
         /// Gets the collection of hypermedia links.
         /// </summary>
-        internal HalLinkCollection linkCollection {
+        protected internal HalLinkCollection linkCollection {
             get { return _linkCollection; }
         }
     }

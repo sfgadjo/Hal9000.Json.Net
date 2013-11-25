@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Hal9000.Json.Net</id>
-    <version>1.0</version>
+    <version>1.0.0.5</version>
     <title>Hal9000.Json.Net</title>
     <authors>Trevel Beshore</authors>
     <owners>Trevel Beshore</owners>
