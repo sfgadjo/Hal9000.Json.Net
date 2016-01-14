@@ -25,7 +25,8 @@ namespace HalWebApiExample.Controllers {
             var customer = new Customer
                 {
                     Name = "Joe Blow",
-                    Title = "President"
+                    Title = "President",
+                    SocialSecurityNumber = "987-12-0987"
                 };
 
             //this will be our root resource
