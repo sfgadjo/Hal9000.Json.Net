@@ -93,7 +93,7 @@ namespace Hal9000.Json.Net.Converters
             bool ignore = false;
             foreach (var attr in info.CustomAttributes)
             {
-                if (attr.AttributeType.FullName == "Newtonsoft.Json.JsonIgnoreAttribute")
+                if (attr.AttributeType.FullName == typeof(JsonIgnoreAttribute).FullName)
                 {
                     ignore = true;
                 }
