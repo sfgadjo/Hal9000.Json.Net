@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Hal9000.Json.Net.Converters;
+using Hal9000.Json.Net.Impl;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using Moq;

@@ -24,6 +24,7 @@ THE SOFTWARE.
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Hal9000.Json.Net.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -64,9 +65,12 @@ namespace Hal9000.Json.Net.Converters
                 var propertyValue = s.GetValue(resource, null);
                 if (propertyValue != null)
                 {
-                    string propertyName = s.GetJsonPropertyName(serializer.ContractResolver);
-                    writer.WritePropertyName(propertyName);
-                    serializer.Serialize(writer, propertyValue);
+                    if (!ignoreProperty(s))
+                    {
+                        string propertyName = s.GetJsonPropertyName(serializer.ContractResolver);
+                        writer.WritePropertyName(propertyName);
+                        serializer.Serialize(writer, propertyValue);
+                    }
                 }
             });
 
@@ -82,6 +86,19 @@ namespace Hal9000.Json.Net.Converters
                 serializer.Serialize(writer, halResource.embeddedResourceCollection);
             }
             writer.WriteEndObject();
+        }
+
+        private bool ignoreProperty(PropertyInfo info)
+        {
+            bool ignore = false;
+            foreach (var attr in info.CustomAttributes)
+            {
+                if (attr.AttributeType.FullName == typeof(JsonIgnoreAttribute).FullName)
+                {
+                    ignore = true;
+                }
+            }
+            return ignore;
         }
 
         /// <summary>
